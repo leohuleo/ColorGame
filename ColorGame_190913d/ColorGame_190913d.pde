@@ -12,13 +12,19 @@ color blue = #00CBE7;
 int randomWords = int(random(0, 5));
 int randomColors = int(random(0, 5));
 int coin = -1;
-int score = 0;
-int time = 120;
+int score = 1;
+int time = 80;
 int highScore = 0;
+int rate = 0;
+int overScreen;
 boolean correct;
 color[] colors = {red, orange, yellow, green, blue};
 String[] words = {"Red", "Orange", "Yellow", "Green", "Blue"};
+Animation animation;
 void setup() {
+  PFont font = createFont("GoldUnderMud.ttf", 20);
+  animation = new Animation("gif", 26);
+  textFont(font);
   size(800, 800);
   mode = intro;
 }
@@ -28,8 +34,10 @@ void draw() {
   } else if (mode ==  game) {
     game();
     time--;
-    println(time);
     if (time == 0) {
+      if (score > highScore) {
+        highScore = score;
+      }
       mode = gameOver;
     }
   } else if (mode == gameOver) {
@@ -41,7 +49,7 @@ void mouseReleased() {
   if (mode ==intro) {
     mode = game;
   } else if (mode == game) {
-    time = 120;
+    time = 80;
     if (randomWords == randomColors) {
       correct = true;
       println("correct");
@@ -50,24 +58,15 @@ void mouseReleased() {
       println("incorrect");
     }
     if (correct && mouseX > 400 || !correct && mouseX < 400) {
-      mode = gameOver;
-      if(score > highScore){
+      if (score > highScore) {
         highScore = score;
       }
-    }
-    score++;
-    coin = int(random(0, 2));
-    if (coin == 1) {
-      randomWords = int(random(0, 5));
-      randomColors = randomWords;
+      mode = gameOver;
     } else {
-      randomWords = int(random(0, 5));
-      while (randomColors == randomWords) {
-        randomColors = int(random(0, 5));
-      }
+      score++;
+      generatePuzzle();
     }
-  }else if(mode == gameOver){
+  } else if (mode == gameOver) {
     mode = intro;
   }
-  
 }
