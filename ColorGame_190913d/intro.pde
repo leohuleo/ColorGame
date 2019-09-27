@@ -13,6 +13,7 @@ void intro() {
   }
 }
 void texts(int x, int y, int size) {
+  fill(255);
   textSize(size);
   textAlign(CENTER);
   text("Color Game", x, y);
